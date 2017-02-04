@@ -18,18 +18,20 @@
     
     <div id="myModal" class="modal">
       <div class="modal-content">
-        <span class="close">&times;</span>
+        <!-- <span class="close">&times;</span> -->
         <div class="container">
           <form>
-            <input type="text" name="taskname" placeholder="Enter a task">
+            <input type="text" id="taskname" name="taskname" placeholder="Enter a task" required>
           </form>
-          <textarea rows="4" cols="50" name="" placeholder="Enter description ..."></textarea>
-            <!-- <button class="button button2">Cancel</button> -->
-            <button class="button button2">Save</button>
-        </div>        
+          <textarea rows="4" cols="50" id ="description" name="description" placeholder="Enter description ..." required></textarea>
+            <!-- <button class="button button2">Cancel</button> -->            
+        </div>
+        <span class="button button2" onclick="create()">Save</span>        
+        <span class="button button2" onclick="cancel()">Cancel</span>        
       </div>
 
     </div>
+
 
     <div>
       <input type="radio" name="tasklist" value="" />
@@ -39,27 +41,8 @@
       <input type="radio" name="tasklist" value="" />
       <span style="width:100px;display:inline-block;">Pending</span>
     </div>
-
-    <div class="card">
-      <div class="container">
-        <h4><b>Task1</b><input id="cb" type="checkbox" style="float: right;"></h4> 
-        <p>Lorem ipsum dolor ammaet Lorem ipsum dolor ammaet Lorem ipsum dolor ammaet  </p> 
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="container">
-        <h4><b>Task1</b><input id="cb" type="checkbox" style="float: right;"></h4> 
-        <p>Lorem ipsum dolor ammaet Lorem ipsum dolor ammaet Lorem ipsum dolor ammaet  </p> 
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="container">
-        <h4><b>Task1</b><input id="cb" type="checkbox" style="float: right;"></h4> 
-        <p>Lorem ipsum dolor ammaet Lorem ipsum dolor ammaet Lorem ipsum dolor ammaet  </p> 
-      </div>
-    </div>
+    
+    <div id="main"></div>
 
     <a class="round-button fixedbutton" id="myBtn">+</a>
  
