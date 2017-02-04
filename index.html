@@ -13,7 +13,7 @@
     </div>
 
     <form>
-      <input type="text" name="search" placeholder="Search..">
+      <input type="text" id="search" name="search" onchange="filter(this)" oninput="this.onchange()" placeholder="Search..">
     </form>
     
     <div id="myModal" class="modal">
@@ -34,11 +34,11 @@
 
 
     <div>
-      <input type="radio" name="tasklist" value="" />
+      <input type="radio" id="all" onchange="filter(this)" name="tasklist" value="all" checked/>
       <span style="width:100px;display:inline-block;">All</span>
-      <input type="radio" name="tasklist" value="" />
+      <input type="radio" id="done" onchange="filter(this)" name="tasklist" value="done" />
       <span style="width:100px;display:inline-block;">Done</span>
-      <input type="radio" name="tasklist" value="" />
+      <input type="radio" id="pending" onchange="filter(this)" name="tasklist" value="pending" />
       <span style="width:100px;display:inline-block;">Pending</span>
     </div>
     

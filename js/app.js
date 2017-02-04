@@ -26,22 +26,54 @@ window.onclick = function(event) {
 //===============================================================
 var task = {};
 var todoData = [];
-//function setters(){
-	if(JSON.parse(localStorage.getItem("todos")) == null){
-		var todos = [];
-	}
-	else{
-		var todos = JSON.parse(localStorage.getItem("todos"));
-	}
-//}
+var searchText = '';
 
-//setters();
 
+
+if(JSON.parse(localStorage.getItem("todos")) == null){
+	var todos = [];
+}
+else{
+	var todos = JSON.parse(localStorage.getItem("todos"));
+}
+
+function searchTodo(text){
+	var searchText = text.value;
+	console.log('searchText',searchText);
+	create(searchText);
+}
+
+function filter(selection){
+	console.log('selection',selection.value);
+	var flag = 'filter';
+	create(selection.value,flag);
+}
 
 function cancel(){
 	modal.style.display = "none";
 }
-function create() {
+
+function trimString(s) {
+  var l=0, r=s.length -1;
+  while(l < s.length && s[l] == ' ') l++;
+  while(r > l && s[r] == ' ') r-=1;
+  return s.substring(l, r+1);
+}
+
+function compareObjects(o1, o2) {
+  var k = '';
+  for(k in o1) if(o1[k] != o2[k]) return false;
+  for(k in o2) if(o1[k] != o2[k]) return false;
+  return true;
+}
+
+function itemExists(haystack, needle) {
+  for(var i=0; i<haystack.length; i++) if(compareObjects(haystack[i], needle)) return true;
+  return false;
+}
+
+function create(status,isfilter,searchText) {
+
     if(JSON.parse(localStorage.getItem("todos")) == null){
 		var todos = [];
 	}
@@ -61,17 +93,82 @@ function create() {
 	console.log('taskname',task.taskname);
 	console.log('todos',todos);
 
-	if(task.taskname != ""){
-		todos.push(task);
-		console.log('todos',todos);
-		localStorage.setItem("todos", JSON.stringify(todos));
-		localStorage.setItem("todoData", JSON.stringify(todos));
+	console.log(status);
+	if(isfilter){
+		console.log('omg');
+	}
+	else{
+	    console.log('yess');
+		if(task.taskname != ""){
+			todos.push(task);
+			console.log('todos',todos);
+			localStorage.setItem("todos", JSON.stringify(todos));
+			localStorage.setItem("todoData", JSON.stringify(todos));
+		}
 	}
 
 
-
+    
 	todoData = JSON.parse(localStorage.getItem("todoData"));
-	console.log('todoData',JSON.stringify(todoData));
+	//console.log('todoData',JSON.stringify(todoData));
+    
+    if(status == 'done'){
+    	var completedData = [];
+	    for(var i = 0; i < todoData.length; i++) {
+	    	if(todoData[i].done == true){
+	    		completedData.push(todoData[i]);
+	    	}
+	    }
+
+	    console.log('completedData',completedData);
+	    todoData = completedData;
+	}
+
+	if(status == 'pending'){
+    	var pendingData = [];
+	    for(var i = 0; i < todoData.length; i++) {
+	    	if(todoData[i].done == false){
+	    		pendingData.push(todoData[i]);
+	    	}
+	    }
+
+	    console.log('pendingData',pendingData);
+	    todoData = pendingData;
+	}
+
+	if(status == 'all'){
+    	var allData = [];
+	    for(var i = 0; i < todoData.length; i++) {
+	        allData.push(todoData[i]);	    	
+	    }
+
+	    console.log('allData',allData);
+	    todoData = allData;
+	}
+    searchText = status;
+	if(searchText){
+		console.log('searchText in create()',searchText);
+		console.log('searchText in TodoData',todoData);
+	    var results = [];
+		/*for(var i=0; i<todoData.length; i++) {
+		  for(var key in todoData[i]) {
+		    //console.log('key',key)
+		    if(typeof todoData[i][key] === 'string' && todoData[i][key].toLowerCase().indexOf(trimString(searchText).toLowerCase())!=-1) {
+		      results.push(todoData[i]);
+		    }
+		  }
+		}*/
+		  toSearch = trimString(searchText).toLowerCase(); // trim it
+		  for(var i=0; i<todoData.length; i++) {
+		    for(var key in todoData[i]) {
+		      if(typeof todoData[i][key] === 'string' && todoData[i][key].toLowerCase().indexOf(toSearch)!=-1) {
+		        if(!itemExists(results, todoData[i])) results.push(todoData[i]);
+		      }
+		    }
+		  }
+        console.log('results',results)
+		todoData = results;
+    }
 
 	for(var i = 0; i < todoData.length; i++) {
 	  if(todoData[i].done){
@@ -79,15 +176,17 @@ function create() {
 	  	var card = document.createElement("div");
 		card.className = "card";
 		card.id = "task"+[i];
-    	card.style.backgroundColor = '#ccc';
+    	card.style.backgroundColor = '#bfbfbf';
+    	card.style.border='1px solid #000';
 		//document.body.appendChild(card);
 		document.getElementById("main").appendChild(card);
 
 		var container = document.createElement("div");
 		container.className = "container";
-		container.innerHTML = '<h4><b><s>'+todoData[i].taskname+'</s></b><input '+
-							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;" checked><span onclick="remove('+[i]+')" style="float:right">&times;</span></h4>'+ 
+		container.innerHTML = '<h4><b>'+todoData[i].taskname+'</b><input '+
+							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;" checked><span onclick="remove('+[i]+')" style="float:right" disabled>&times;</span></h4>'+ 
 	                          '<p>'+todoData[i].description+'</p>';
+	    container.getElementsByTagName("B")[0].style.textDecoration="line-through";
 		card.appendChild(container);
 	  }else{
 	  	console.log('else');
@@ -119,7 +218,10 @@ function done(x, _this, task) {
   	todoData[task].done = true;
   	console.log(x.getElementsByTagName("B"));
   	x.getElementsByTagName("B")[0].style.textDecoration="line-through";
-    x.style.backgroundColor = '#ccc';
+    x.style.backgroundColor = '#bfbfbf';
+    x.style.border='1px solid #000';
+    //x.style.boxShadow='-2px -3px 8px 0 rgba(0,0,0,0.2);transition: 0.3s';
+
   } else  {
   	todoData[task].done = false;
     x.style = '';
@@ -127,7 +229,7 @@ function done(x, _this, task) {
   }
   localStorage.setItem("todos", JSON.stringify(todoData));
   localStorage.setItem("todoData", JSON.stringify(todoData));
-  create();
+  //create();
   console.log('TodoData',todoData);
 }
 
