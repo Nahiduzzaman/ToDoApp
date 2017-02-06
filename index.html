@@ -15,19 +15,20 @@
     <header>
       <div>
          <div style="width: 10%; height: 50%; background-color: green; float:left;">
-           <img style="padding: 10px" src="css/images/todo.png" width="100" height="100">
+           <img style="padding:10px 0px 10px 45px;"  tabindex="1" src="css/images/todo.png" alt="todo_logo" width="100" height="100">
          </div>
          <div style="width: 90%; height: 100%; background-color: blue; float:right; padding: 29px 0px 29px;">
-           <input type="text" style="width: 90%; margin-left: 50px;" id="search" name="search" onchange="searchTodo(this)" oninput="this.onchange()" placeholder="Search..">
+         <label for="search"></label>
+           <input type="text" tabindex="2" accesskey="s" style="width: 90%; margin-left: 50px;" id="search" name="search" onchange="searchTodo(this)" oninput="this.onchange()" placeholder="Search..">
          </div>
       </div>
     </header>
 
-    <div style="background-color: grey;height:500px;">
-    	<h1 align="center" style="padding-top: 20%;font-size: 145px;">ToDo App</h1>
+    <div style=";height:500px;">
+    	<h1 align="center" style="padding-top: 13%;font-size: 145px;">ToDo App</h1>
     </div>
 
-    <div>
+    <div tabindex="3" style="padding: 15px; background: brown;">
       <input type="radio" id="all" onchange="filter(this)" name="tasklist" value="all" checked/>
       <span style="width:100px;display:inline-block;">All</span>
       <input type="radio" id="done" onchange="filter(this)" name="tasklist" value="done" />
@@ -35,10 +36,103 @@
       <input type="radio" id="pending" onchange="filter(this)" name="tasklist" value="pending" />
       <span style="width:100px;display:inline-block;">Pending</span>
     </div>
-    
+
+
+    <ul>
+      <li>
+          <div style="display:inline">
+            <div class="taskimg">
+               <img class="img_resize" tabindex="1" src="css/images/todo.png" alt="todo_logo">
+            </div>
+            <div class="card" id="task0">
+              <div class="container">
+                <h4><b>Ipsum lorem at 9.00 pm</b>
+                  <input type="checkbox" tabindex="4"  onchange="done(task0, this,0)" style="float: right;">
+                  <span onclick="remove(0)"  tabindex="5" style="float:right">×</span>
+                </h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+              </div>
+            </div>
+          </div>
+      </li>
+
+       <li>
+          <div style="display:inline">
+            <div class="taskimg">
+               <img class="img_resize" tabindex="1" src="css/images/todo.png" alt="todo_logo">
+            </div>
+            <div class="card" id="task0">
+              <div class="container">
+                <h4><b>Ipsum lorem at 9.00 pm</b>
+                  <input type="checkbox" tabindex="4"  onchange="done(task0, this,0)" style="float: right;">
+                  <span onclick="remove(0)"  tabindex="5" style="float:right">×</span>
+                </h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+              </div>
+            </div>
+          </div>
+      </li>
+
+      <li>
+          <div style="display:inline">
+            <div class="taskimg">
+               <img class="img_resize" tabindex="1" src="css/images/todo.png" alt="todo_logo">
+            </div>
+            <div class="card" id="task0">
+              <div class="container">
+                <h4><b>Ipsum lorem at 9.00 pm</b>
+                  <input type="checkbox" tabindex="4"  onchange="done(task0, this,0)" style="float: right;">
+                  <span onclick="remove(0)"  tabindex="5" style="float:right">×</span>
+                </h4>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+              </div>
+            </div>
+          </div>
+      </li>
+    </ul>
+
+    <div style="height:500px;">
+      <article class="tile-container left" tabindex="0">
+          <div class="tile tile-fix">
+              <div style="float:left;">
+                <img style="padding-left:7px; width: 95px; height: 95px"  tabindex="1" src="css/images/todo.png" alt="todo_logo">
+              </div>
+              <div style="float: left;height: 125px; width: 440px">
+                 <p>
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but
+                 </p>
+              </div>
+          </div>
+      </article>
+      <article class="tile-container left" tabindex="0">
+          <div class="tile tile-fix">
+              <div style="float:left;">
+                <img style="padding-left:7px; width: 95px; height: 95px"  tabindex="1" src="css/images/todo.png" alt="todo_logo">
+              </div>
+              <div style="float: left;height: 125px; width: 440px">
+                 <p>
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but
+                 </p>
+              </div>
+          </div>
+      </article>
+      <article class="tile-container left" tabindex="0">
+          <div class="tile tile-fix">
+              <div style="float:left;">
+                <img style="padding-left:7px; width: 95px; height: 95px"  tabindex="1" src="css/images/todo.png" alt="todo_logo">
+              </div>
+              <div style="float: left;height: 125px; width: 440px">
+                 <p>
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but
+                 </p>
+              </div>
+          </div>
+      </article>
+    </div>
+
     
 
-    <div id="main"></div>
+    <!-- <div id="main"></div> -->
 
     <div id="myModal" class="modal">
       <div class="modal-content">
