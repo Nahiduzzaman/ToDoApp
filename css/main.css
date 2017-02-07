@@ -4,6 +4,9 @@ body{
     background-attachment: fixed;
     background-origin: border-box;
     background-size: cover;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
 }
 
 .header {
@@ -172,6 +175,16 @@ li{
     list-style: none;
     display: inline-block;
     width: 100%;
+}
+
+.side-by-side {
+  color: white;
+  width: 100%;
+  border: 1px solid black;
+
+}
+.side-by-side li {
+  display: inline;
 }
 
 .tile-container {

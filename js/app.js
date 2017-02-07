@@ -90,15 +90,15 @@ function create(status,isfilter,searchText) {
 		done: false
 	}
 
-	console.log('taskname',task.taskname);
-	console.log('todos',todos);
+	//console.log('taskname',task.taskname);
+	//console.log('todos',todos);
 
-	console.log(status);
+	//console.log(status);
 	if(isfilter){
 		console.log('omg');
 	}
 	else{
-	    console.log('yess');
+	    //console.log('yess');
 		if(task.taskname != ""){
 			todos.push(task);
 			console.log('todos',todos);
@@ -112,7 +112,7 @@ function create(status,isfilter,searchText) {
 	todoData = JSON.parse(localStorage.getItem("todoData"));
 	//console.log('todoData',JSON.stringify(todoData));
     
-    if(status == 'done'){
+    /*if(status == 'done'){
     	var completedData = [];
 	    for(var i = 0; i < todoData.length; i++) {
 	    	if(todoData[i].done == true){
@@ -144,20 +144,20 @@ function create(status,isfilter,searchText) {
 
 	    console.log('allData',allData);
 	    todoData = allData;
-	}
+	}*/
 
-	if(searchText){
+	/*if(searchText){
 		console.log('searchText in create()',searchText);
 		console.log('searchText in TodoData',todoData);
 	    var results = [];
-		/*for(var i=0; i<todoData.length; i++) {
+		for(var i=0; i<todoData.length; i++) {
 		  for(var key in todoData[i]) {
 		    //console.log('key',key)
 		    if(typeof todoData[i][key] === 'string' && todoData[i][key].toLowerCase().indexOf(trimString(searchText).toLowerCase())!=-1) {
 		      results.push(todoData[i]);
 		    }
 		  }
-		}*/
+		}
 		  toSearch = trimString(searchText).toLowerCase(); // trim it
 		  for(var i=0; i<todoData.length; i++) {
 		    for(var key in todoData[i]) {
@@ -168,11 +168,11 @@ function create(status,isfilter,searchText) {
 		  }
         console.log('results',results)
 		todoData = results;
-    }
-
+    }*/
+    console.log('todoData',todoData)
 	for(var i = 0; i < todoData.length; i++) {
 	  if(todoData[i].done){
-	  	console.log('if')
+	  	//console.log('if')
 	  	var card = document.createElement("div");
 		card.className = "card";
 		card.id = "task"+[i];
@@ -189,7 +189,7 @@ function create(status,isfilter,searchText) {
 	    container.getElementsByTagName("B")[0].style.textDecoration="line-through";
 		card.appendChild(container);
 	  }else{
-	  	console.log('else');
+	  	//console.log('else');
 		var card = document.createElement("div");
 		card.className = "card";
 		card.id = "task"+[i];
@@ -213,15 +213,15 @@ create();
 
 
 function done(x, _this, task) {
-  console.log(todoData[task]);
+  //console.log('x',x);
+  //console.log(todoData[task]);
   if (_this.checked) {
   	todoData[task].done = true;
-  	console.log(x.getElementsByTagName("B"));
+  	//console.log(x.getElementsByTagName("B"));
   	x.getElementsByTagName("B")[0].style.textDecoration="line-through";
     x.style.backgroundColor = '#bfbfbf';
     x.style.border='1px solid #000';
     //x.style.boxShadow='-2px -3px 8px 0 rgba(0,0,0,0.2);transition: 0.3s';
-
   } else  {
   	todoData[task].done = false;
     x.style = '';
