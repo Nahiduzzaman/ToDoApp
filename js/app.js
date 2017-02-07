@@ -26,6 +26,7 @@ window.onclick = function(event) {
 //===============================================================
 var task = {};
 var todoData = [];
+var data = [];
 var searchText = '';
 
 
@@ -45,6 +46,7 @@ function searchTodo(text){
 
 function filter(selection){
 	console.log('selection',selection.value);
+
 	var flag = 'filter';
 	create(selection.value,flag);
 }
@@ -112,7 +114,7 @@ function create(status,isfilter,searchText) {
 	todoData = JSON.parse(localStorage.getItem("todoData"));
 	//console.log('todoData',JSON.stringify(todoData));
     
-    /*if(status == 'done'){
+    if(status == 'done'){
     	var completedData = [];
 	    for(var i = 0; i < todoData.length; i++) {
 	    	if(todoData[i].done == true){
@@ -121,10 +123,10 @@ function create(status,isfilter,searchText) {
 	    }
 
 	    console.log('completedData',completedData);
-	    todoData = completedData;
+	    data = completedData;
 	}
 
-	if(status == 'pending'){
+	else if(status == 'pending'){
     	var pendingData = [];
 	    for(var i = 0; i < todoData.length; i++) {
 	    	if(todoData[i].done == false){
@@ -133,18 +135,12 @@ function create(status,isfilter,searchText) {
 	    }
 
 	    console.log('pendingData',pendingData);
-	    todoData = pendingData;
+	    data = pendingData;
+	}	
+
+	else{
+    	data = todoData;
 	}
-
-	if(status == 'all'){
-    	var allData = [];
-	    for(var i = 0; i < todoData.length; i++) {
-	        allData.push(todoData[i]);	    	
-	    }
-
-	    console.log('allData',allData);
-	    todoData = allData;
-	}*/
 
 	/*if(searchText){
 		console.log('searchText in create()',searchText);
@@ -169,28 +165,44 @@ function create(status,isfilter,searchText) {
         console.log('results',results)
 		todoData = results;
     }*/
-    console.log('todoData',todoData)
-	for(var i = 0; i < todoData.length; i++) {
-	  if(todoData[i].done){
-	  	//console.log('if')
+    console.log('data',data);
+    data = sortbytitle(data);
+    console.log('data',data);
+    console.log('todoData',todoData);
+    
+	for(var i = 0; i < data.length; i++) {
+	  if(data[i].done){
+	  	console.log('if')
+	  	var list = document.createElement("li");
+	  	
+	  	var outerdiv = document.createElement("div");
+	  	outerdiv.style.display = "inline";
+	  	outerdiv.innerHTML = '<div class="taskimg">'+
+               					'<img class="img_resize" tabindex="1" src="css/images/todo.png" alt="todo_logo">'+
+            				  '</div>';
+
 	  	var card = document.createElement("div");
 		card.className = "card";
 		card.id = "task"+[i];
     	card.style.backgroundColor = '#bfbfbf';
-    	card.style.border='1px solid #000';
-		//document.body.appendChild(card);
-		document.getElementById("main").appendChild(card);
 
 		var container = document.createElement("div");
 		container.className = "container";
-		container.innerHTML = '<h4><b>'+todoData[i].taskname+'</b><input '+
-							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;" checked><span onclick="remove('+[i]+')" style="float:right" disabled>&times;</span></h4>'+ 
-	                          '<p>'+todoData[i].description+'</p>';
+		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
+							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;" checked><span onclick="remove('+[i]+')" style="float:right;cursor:pointer" disabled>&times;</span></h4>'+ 
+	                          '<p>'+data[i].description+'</p>';
 	    container.getElementsByTagName("B")[0].style.textDecoration="line-through";
+
+	    outerdiv.appendChild(card);
 		card.appendChild(container);
+		list.appendChild(outerdiv);
+
+		console.log('list',list);
+		document.getElementById("main").appendChild(list);
+
 	  }else{
 	  	//console.log('else');
-		var card = document.createElement("div");
+		/*var card = document.createElement("div");
 		card.className = "card";
 		card.id = "task"+[i];
 		//document.body.appendChild(card);
@@ -198,10 +210,35 @@ function create(status,isfilter,searchText) {
 
 		var container = document.createElement("div");
 		container.className = "container";
-		container.innerHTML = '<h4><b>'+todoData[i].taskname+'</b><input '+
-							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;"><span onclick="remove('+[i]+')" style="float:right">&times;</span></h4>'+ 
-	                          '<p>'+todoData[i].description+'</p>';
+		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
+							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;"><span onclick="remove('+[i]+')" style="float:right;cursor:pointer">&times;</span></h4>'+ 
+	                          '<p>'+data[i].description+'</p>';
+		card.appendChild(container);*/
+
+		var list = document.createElement("li");
+
+	  	var outerdiv = document.createElement("div");
+	  	outerdiv.style.display = "inline";
+	  	outerdiv.innerHTML = '<div class="taskimg">'+
+               					'<img class="img_resize" tabindex="1" src="css/images/todo.png" alt="todo_logo">'+
+            				  '</div>';
+
+	  	var card = document.createElement("div");
+		card.className = "card";
+		card.id = "task"+[i];
+
+		var container = document.createElement("div");
+		container.className = "container";
+		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
+							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;"><span onclick="remove('+[i]+')" style="float:right;cursor:pointer">&times;</span></h4>'+ 
+	                          '<p>'+data[i].description+'</p>';
+		
+		outerdiv.appendChild(card);
 		card.appendChild(container);
+		list.appendChild(outerdiv);
+
+		console.log('list',list);
+		document.getElementById("main").appendChild(list);
 	  }
 	}
 
@@ -209,7 +246,8 @@ function create(status,isfilter,searchText) {
 	
 }
 
-create();
+//create();
+
 
 
 function done(x, _this, task) {
@@ -220,7 +258,6 @@ function done(x, _this, task) {
   	//console.log(x.getElementsByTagName("B"));
   	x.getElementsByTagName("B")[0].style.textDecoration="line-through";
     x.style.backgroundColor = '#bfbfbf';
-    x.style.border='1px solid #000';
     //x.style.boxShadow='-2px -3px 8px 0 rgba(0,0,0,0.2);transition: 0.3s';
   } else  {
   	todoData[task].done = false;
@@ -230,17 +267,39 @@ function done(x, _this, task) {
   localStorage.setItem("todos", JSON.stringify(todoData));
   localStorage.setItem("todoData", JSON.stringify(todoData));
   //create();
-  console.log('TodoData',todoData);
+  console.log('TodoData after done or undone',todoData);
 }
 
 function remove(idx){
 	console.log('idx',idx);
+	console.log('todos-before',todos)
 	todos.splice(idx,1);
+	console.log('todos',todos)
 	todoData.splice(idx, 1);
 	localStorage.setItem("todos", JSON.stringify(todos));
 	localStorage.setItem("todoData", JSON.stringify(todoData));
-	create();
+	create(undefined,true,undefined);
 }
+
+function sortbytitle(data){
+	console.log('data for sort',data)
+	data.sort(function(a, b) {
+	  var titleA = a.taskname.toUpperCase(); // ignore upper and lowercase
+	  var titleB = b.taskname.toUpperCase(); // ignore upper and lowercase
+	  if (titleA < titleB) {
+	    return -1;
+	  }
+	  if (titleA > titleB) {
+	    return 1;
+	  }
+	  return 0;
+	});
+    console.log('data after sort',data);
+    return data;
+
+}
+
+
 /*div.style.height = "100px";
 div.style.background = "red";
 div.style.color = "white";
