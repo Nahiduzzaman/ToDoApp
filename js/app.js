@@ -1,22 +1,18 @@
 var modal = document.getElementById('myModal');
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
 
-// Get the <span> element that closes the modal
+var btn = document.getElementById("myBtn");
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
+// editbtn.onclick = function() {
+// 	console.log('clickededit');
+//     modal.style.display = "block";
+// }
+
 btn.onclick = function() {
+	console.log('clicked');
     modal.style.display = "block";
 }
-
-// When the user clicks on <span> (x), close the modal
-/*span.onclick = function() {
-    modal.style.display = "none";
-}*/
-
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
@@ -188,8 +184,11 @@ function create(status,isfilter,searchText) {
 
 		var container = document.createElement("div");
 		container.className = "container";
+		var editId = "editBtn"+i;
 		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
-							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;" checked><span onclick="remove('+[i]+')" style="float:right;cursor:pointer" disabled>&times;</span></h4>'+ 
+							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;" checked>'+
+							  '<span onclick="remove('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px" disabled>&times;</span>'+
+							  '<a id="editId" style="float:right;cursor:pointer;margin-right: 10px">Edit</a></h4>'+ 
 	                          '<p>'+data[i].description+'</p>';
 	    container.getElementsByTagName("B")[0].style.textDecoration="line-through";
 
@@ -199,22 +198,9 @@ function create(status,isfilter,searchText) {
 
 		console.log('list',list);
 		document.getElementById("main").appendChild(list);
+		editbtn = document.getElementById("editId");
 
 	  }else{
-	  	//console.log('else');
-		/*var card = document.createElement("div");
-		card.className = "card";
-		card.id = "task"+[i];
-		//document.body.appendChild(card);
-		document.getElementById("main").appendChild(card);
-
-		var container = document.createElement("div");
-		container.className = "container";
-		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
-							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;"><span onclick="remove('+[i]+')" style="float:right;cursor:pointer">&times;</span></h4>'+ 
-	                          '<p>'+data[i].description+'</p>';
-		card.appendChild(container);*/
-
 		var list = document.createElement("li");
 
 	  	var outerdiv = document.createElement("div");
@@ -230,7 +216,9 @@ function create(status,isfilter,searchText) {
 		var container = document.createElement("div");
 		container.className = "container";
 		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
-							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;"><span onclick="remove('+[i]+')" style="float:right;cursor:pointer">&times;</span></h4>'+ 
+							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;">'+
+							  '<span onclick="remove('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">&times;</span>'+
+							  '<a id="editBtn'+[i]+'" onclick="editOnClick('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">Edit</a></h4>'+ 
 	                          '<p>'+data[i].description+'</p>';
 		
 		outerdiv.appendChild(card);
@@ -298,7 +286,29 @@ function sortbytitle(data){
     return data;
 
 }
+var index;
+function editOnClick(id){
+	console.log('edit_id',id);
+	console.log('taskname',todoData[id].taskname );
+	console.log('taskDesc',todoData[id].description );
+	modal.style.display = "block";
+	modal.getElementsByTagName("INPUT")[0].value = todoData[id].taskname;
+	modal.getElementsByTagName("TEXTAREA")[0].value = todoData[id].description;
+	modal.getElementsByTagName("SPAN")[0].style.display = "none";
+	index = id;
+	console.log(index);
+	
+}
 
+function update(){
+	console.log(index);
+	todoData[index].taskname = modal.getElementsByTagName("INPUT")[0].value;
+	todoData[index].description = modal.getElementsByTagName("TEXTAREA")[0].value;
+	localStorage.setItem("todoData", JSON.stringify(todoData));
+	console.log(JSON.parse(localStorage.getItem("todoData")));
+
+	//data.splice(2, 1, "Lemon");
+}
 
 /*div.style.height = "100px";
 div.style.background = "red";
