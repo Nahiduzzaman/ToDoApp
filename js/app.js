@@ -1,31 +1,9 @@
-var modal = document.getElementById('myModal');
-
-
-var btn = document.getElementById("myBtn");
-var span = document.getElementsByClassName("close")[0];
-
-// editbtn.onclick = function() {
-// 	console.log('clickededit');
-//     modal.style.display = "block";
-// }
-
-btn.onclick = function() {
-	console.log('clicked');
-    modal.style.display = "block";
-}
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
 
 //===============================================================
 var task = {};
 var todoData = [];
 var data = [];
 var searchText = '';
-
-
 
 if(JSON.parse(localStorage.getItem("todos")) == null){
 	var todos = [];
@@ -34,41 +12,6 @@ else{
 	var todos = JSON.parse(localStorage.getItem("todos"));
 }
 
-function searchTodo(text){
-	var searchText = text.value;
-	console.log('searchText',searchText);
-	create(undefined,undefined,searchText);
-}
-
-function filter(selection){
-	console.log('selection',selection.value);
-
-	var flag = 'filter';
-	create(selection.value,flag);
-}
-
-function cancel(){
-	modal.style.display = "none";
-}
-
-function trimString(s) {
-  var l=0, r=s.length -1;
-  while(l < s.length && s[l] == ' ') l++;
-  while(r > l && s[r] == ' ') r-=1;
-  return s.substring(l, r+1);
-}
-
-function compareObjects(o1, o2) {
-  var k = '';
-  for(k in o1) if(o1[k] != o2[k]) return false;
-  for(k in o2) if(o1[k] != o2[k]) return false;
-  return true;
-}
-
-function itemExists(haystack, needle) {
-  for(var i=0; i<haystack.length; i++) if(compareObjects(haystack[i], needle)) return true;
-  return false;
-}
 
 function create(status,isfilter,searchText) {
 
@@ -88,10 +31,6 @@ function create(status,isfilter,searchText) {
 		done: false
 	}
 
-	//console.log('taskname',task.taskname);
-	//console.log('todos',todos);
-
-	//console.log(status);
 	if(isfilter){
 		console.log('omg');
 	}
@@ -104,12 +43,8 @@ function create(status,isfilter,searchText) {
 			localStorage.setItem("todoData", JSON.stringify(todos));
 		}
 	}
-
-
     
-	todoData = JSON.parse(localStorage.getItem("todoData"));
-	//console.log('todoData',JSON.stringify(todoData));
-    
+	todoData = JSON.parse(localStorage.getItem("todoData"));    
     if(status == 'done'){
     	var completedData = [];
 	    for(var i = 0; i < todoData.length; i++) {
@@ -121,7 +56,6 @@ function create(status,isfilter,searchText) {
 	    console.log('completedData',completedData);
 	    data = completedData;
 	}
-
 	else if(status == 'pending'){
     	var pendingData = [];
 	    for(var i = 0; i < todoData.length; i++) {
@@ -133,7 +67,6 @@ function create(status,isfilter,searchText) {
 	    console.log('pendingData',pendingData);
 	    data = pendingData;
 	}	
-
 	else{
     	data = todoData;
 	}
@@ -188,7 +121,7 @@ function create(status,isfilter,searchText) {
 		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
 							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;" checked>'+
 							  '<span onclick="remove('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px" disabled>&times;</span>'+
-							  '<a id="editId" style="float:right;cursor:pointer;margin-right: 10px">Edit</a></h4>'+ 
+							  '<a id="editBtn'+[i]+'" onclick="editOnClick('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">Edit</a></h4>'+ 
 	                          '<p>'+data[i].description+'</p>';
 	    container.getElementsByTagName("B")[0].style.textDecoration="line-through";
 
@@ -239,14 +172,10 @@ function create(status,isfilter,searchText) {
 
 
 function done(x, _this, task) {
-  //console.log('x',x);
-  //console.log(todoData[task]);
   if (_this.checked) {
   	todoData[task].done = true;
-  	//console.log(x.getElementsByTagName("B"));
   	x.getElementsByTagName("B")[0].style.textDecoration="line-through";
     x.style.backgroundColor = '#bfbfbf';
-    //x.style.boxShadow='-2px -3px 8px 0 rgba(0,0,0,0.2);transition: 0.3s';
   } else  {
   	todoData[task].done = false;
     x.style = '';
@@ -254,7 +183,6 @@ function done(x, _this, task) {
   }
   localStorage.setItem("todos", JSON.stringify(todoData));
   localStorage.setItem("todoData", JSON.stringify(todoData));
-  //create();
   console.log('TodoData after done or undone',todoData);
 }
 
@@ -284,7 +212,6 @@ function sortbytitle(data){
 	});
     console.log('data after sort',data);
     return data;
-
 }
 var index;
 function editOnClick(id){
@@ -296,8 +223,7 @@ function editOnClick(id){
 	modal.getElementsByTagName("TEXTAREA")[0].value = todoData[id].description;
 	modal.getElementsByTagName("SPAN")[0].style.display = "none";
 	index = id;
-	console.log(index);
-	
+	console.log(index);	
 }
 
 function update(){
@@ -306,28 +232,57 @@ function update(){
 	todoData[index].description = modal.getElementsByTagName("TEXTAREA")[0].value;
 	localStorage.setItem("todoData", JSON.stringify(todoData));
 	console.log(JSON.parse(localStorage.getItem("todoData")));
-
-	//data.splice(2, 1, "Lemon");
+	modal.style.display = "none";
+	window.location.reload();
 }
 
-/*div.style.height = "100px";
-div.style.background = "red";
-div.style.color = "white";
-div.innerHTML = "Hello";*/
+var modal = document.getElementById('myModal');
+var btn = document.getElementById("myBtn");
+var span = document.getElementsByClassName("close")[0];
 
-//document.getElementById("main").appendChild(div);
-
-/*function create() {
-       var mainContainer = document.createElement("div");
-       mainContainer.id = "mainContainer";
-       document.body.appendChild(mainContainer);
-        
-       for(var i = 0; i < 3; i++) {
-           var divBlock = document.createElement("div");                
-           divBlock.className = "blocks";
-           divBlock.innerHTML = "Hello"
-           mainContainer.appendChild(divBlock);       
-       }
-            
+btn.onclick = function() {
+	console.log('clicked');
+    modal.style.display = "block";
+}
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
     }
- create();*/
+}
+
+function searchTodo(text){
+	var searchText = text.value;
+	console.log('searchText',searchText);
+	create(undefined,undefined,searchText);
+}
+
+function filter(selection){
+	console.log('selection',selection.value);
+
+	var flag = 'filter';
+	create(selection.value,flag);
+}
+
+function cancel(){
+	modal.style.display = "none";
+}
+
+function trimString(s) {
+  var l=0, r=s.length -1;
+  while(l < s.length && s[l] == ' ') l++;
+  while(r > l && s[r] == ' ') r-=1;
+  return s.substring(l, r+1);
+}
+
+function compareObjects(o1, o2) {
+  var k = '';
+  for(k in o1) if(o1[k] != o2[k]) return false;
+  for(k in o2) if(o1[k] != o2[k]) return false;
+  return true;
+}
+
+function itemExists(haystack, needle) {
+  for(var i=0; i<haystack.length; i++) if(compareObjects(haystack[i], needle)) return true;
+  return false;
+}
+
