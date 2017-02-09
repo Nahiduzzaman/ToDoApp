@@ -1,25 +1,20 @@
-
-//===============================================================
 var task = {};
-var todoData = [];
 var data = [];
 var searchText = '';
-
-if(JSON.parse(localStorage.getItem("todos")) == null){
-	var todos = [];
+if(JSON.parse(localStorage.getItem("todoData")) == null){
+	var todoData = [];
 }
 else{
-	var todos = JSON.parse(localStorage.getItem("todos"));
+	var todoData = JSON.parse(localStorage.getItem("todoData"));
 }
 
 
 function create(status,isfilter,searchText) {
-
-    if(JSON.parse(localStorage.getItem("todos")) == null){
-		var todos = [];
+    if(JSON.parse(localStorage.getItem("todoData")) == null){
+		todoData = [];
 	}
 	else{
-		var todos = JSON.parse(localStorage.getItem("todos"));
+		todoData = JSON.parse(localStorage.getItem("todoData"));
 	}
 
 	document.getElementById("main").innerHTML="";
@@ -35,43 +30,39 @@ function create(status,isfilter,searchText) {
 		console.log('omg');
 	}
 	else{
-	    //console.log('yess');
 		if(task.taskname != ""){
-			todos.push(task);
-			console.log('todos',todos);
-			localStorage.setItem("todos", JSON.stringify(todos));
-			localStorage.setItem("todoData", JSON.stringify(todos));
+			todoData.push(task);
+			console.log('todoData',todoData);
+			localStorage.setItem("todoData", JSON.stringify(todoData));
 		}
 	}
     
-	todoData = JSON.parse(localStorage.getItem("todoData"));    
+	todoData = JSON.parse(localStorage.getItem("todoData"));
+
     if(status == 'done'){
-    	var completedData = [];
 	    for(var i = 0; i < todoData.length; i++) {
 	    	if(todoData[i].done == true){
-	    		completedData.push(todoData[i]);
+	    		createlist(i);
 	    	}
-	    }
-
-	    console.log('completedData',completedData);
-	    data = completedData;
+	    }    
 	}
 	else if(status == 'pending'){
-    	var pendingData = [];
 	    for(var i = 0; i < todoData.length; i++) {
 	    	if(todoData[i].done == false){
-	    		pendingData.push(todoData[i]);
+	    		createlist(i);
 	    	}
 	    }
-
-	    console.log('pendingData',pendingData);
-	    data = pendingData;
 	}	
 	else{
-    	data = todoData;
+    	data = sortbytitle(todoData);
+    	for(var i = 0; i < data.length; i++) {
+	    	createlist(i);	    	
+	    }
 	}
 
-	/*if(searchText){
+	console.log('searchText',searchText);
+
+	if(searchText){
 		console.log('searchText in create()',searchText);
 		console.log('searchText in TodoData',todoData);
 	    var results = [];
@@ -92,83 +83,55 @@ function create(status,isfilter,searchText) {
 		    }
 		  }
         console.log('results',results)
-		todoData = results;
-    }*/
+		data = results;
+		for(var i = 0; i < data.length; i++) {
+	    	createlist(i);	    	
+	    }
+    }
     console.log('data',data);
-    data = sortbytitle(data);
     console.log('data',data);
     console.log('todoData',todoData);
-    
-	for(var i = 0; i < data.length; i++) {
-	  if(data[i].done){
-	  	console.log('if')
-	  	var list = document.createElement("li");
-	  	
-	  	var outerdiv = document.createElement("div");
-	  	outerdiv.style.display = "inline";
-	  	outerdiv.innerHTML = '<div class="taskimg">'+
-               					'<img class="img_resize" tabindex="1" src="css/images/todo.png" alt="todo_logo">'+
-            				  '</div>';
-
-	  	var card = document.createElement("div");
-		card.className = "card";
-		card.id = "task"+[i];
-    	card.style.backgroundColor = '#bfbfbf';
-
-		var container = document.createElement("div");
-		container.className = "container";
-		var editId = "editBtn"+i;
-		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
-							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;" checked>'+
-							  '<span onclick="remove('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px" disabled>&times;</span>'+
-							  '<a id="editBtn'+[i]+'" onclick="editOnClick('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">Edit</a></h4>'+ 
-	                          '<p>'+data[i].description+'</p>';
-	    container.getElementsByTagName("B")[0].style.textDecoration="line-through";
-
-	    outerdiv.appendChild(card);
-		card.appendChild(container);
-		list.appendChild(outerdiv);
-
-		console.log('list',list);
-		document.getElementById("main").appendChild(list);
-		editbtn = document.getElementById("editId");
-
-	  }else{
-		var list = document.createElement("li");
-
-	  	var outerdiv = document.createElement("div");
-	  	outerdiv.style.display = "inline";
-	  	outerdiv.innerHTML = '<div class="taskimg">'+
-               					'<img class="img_resize" tabindex="1" src="css/images/todo.png" alt="todo_logo">'+
-            				  '</div>';
-
-	  	var card = document.createElement("div");
-		card.className = "card";
-		card.id = "task"+[i];
-
-		var container = document.createElement("div");
-		container.className = "container";
-		container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
-							  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;">'+
-							  '<span onclick="remove('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">&times;</span>'+
-							  '<a id="editBtn'+[i]+'" onclick="editOnClick('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">Edit</a></h4>'+ 
-	                          '<p>'+data[i].description+'</p>';
-		
-		outerdiv.appendChild(card);
-		card.appendChild(container);
-		list.appendChild(outerdiv);
-
-		console.log('list',list);
-		document.getElementById("main").appendChild(list);
-	  }
-	}
+  
 
 	modal.style.display = "none";
+
 	
 }
 
-//create();
+function createlist(i){
+	var list = document.createElement("li");
+	list.id = "list"+i;
 
+  	var outerdiv = document.createElement("div");
+  	outerdiv.style.display = "inline";
+  	outerdiv.innerHTML = '<div class="taskimg">'+
+           					'<img class="img_resize" tabindex="1" src="css/images/todo.png" alt="todo_logo">'+
+        				  '</div>';
+
+  	var card = document.createElement("div");
+	card.className = "card";
+	card.id = "task"+[i];
+
+	var container = document.createElement("div");
+	container.className = "container";
+	container.innerHTML = '<h4><b>'+data[i].taskname+'</b><input '+
+						  'type="checkbox" onChange="done(task'+[i]+', this,'+[i]+')" style="float: right;">'+
+						  '<span onclick="remove('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">&times;</span>'+
+						  '<a id="editBtn'+[i]+'" onclick="editOnClick('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">Edit</a></h4>'+ 
+                          '<p>'+data[i].description+'</p>';
+
+    if(todoData[i].done == true){
+		card.style.backgroundColor = '#bfbfbf';
+		container.getElementsByTagName("B")[0].style.textDecoration="line-through";
+	}
+	
+	outerdiv.appendChild(card);
+	card.appendChild(container);
+	list.appendChild(outerdiv);
+
+	console.log('list',list);
+	document.getElementById("main").appendChild(list);
+}
 
 
 function done(x, _this, task) {
@@ -181,20 +144,17 @@ function done(x, _this, task) {
     x.style = '';
     x.getElementsByTagName("B")[0].style.textDecoration="";
   }
-  localStorage.setItem("todos", JSON.stringify(todoData));
+  //localStorage.setItem("todos", JSON.stringify(todoData));
   localStorage.setItem("todoData", JSON.stringify(todoData));
   console.log('TodoData after done or undone',todoData);
 }
 
 function remove(idx){
 	console.log('idx',idx);
-	console.log('todos-before',todos)
-	todos.splice(idx,1);
-	console.log('todos',todos)
 	todoData.splice(idx, 1);
-	localStorage.setItem("todos", JSON.stringify(todos));
+	var idtodelete = 'list'+idx;
+	document.getElementById(idtodelete).remove();
 	localStorage.setItem("todoData", JSON.stringify(todoData));
-	create(undefined,true,undefined);
 }
 
 function sortbytitle(data){
@@ -213,15 +173,18 @@ function sortbytitle(data){
     console.log('data after sort',data);
     return data;
 }
+
 var index;
 function editOnClick(id){
 	console.log('edit_id',id);
+	console.log('todoData in edit',todoData)
 	console.log('taskname',todoData[id].taskname );
 	console.log('taskDesc',todoData[id].description );
 	modal.style.display = "block";
 	modal.getElementsByTagName("INPUT")[0].value = todoData[id].taskname;
 	modal.getElementsByTagName("TEXTAREA")[0].value = todoData[id].description;
-	modal.getElementsByTagName("SPAN")[0].style.display = "none";
+    modal.getElementsByTagName("SPAN")[0].style.display = 'none'; //save
+    modal.getElementsByTagName("SPAN")[1].style.display = 'unset'; //update
 	index = id;
 	console.log(index);	
 }
@@ -236,23 +199,10 @@ function update(){
 	window.location.reload();
 }
 
-var modal = document.getElementById('myModal');
-var btn = document.getElementById("myBtn");
-var span = document.getElementsByClassName("close")[0];
-
-btn.onclick = function() {
-	console.log('clicked');
-    modal.style.display = "block";
-}
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
 
 function searchTodo(text){
 	var searchText = text.value;
-	console.log('searchText',searchText);
+	//console.log('searchText',searchText);
 	create(undefined,undefined,searchText);
 }
 
@@ -285,4 +235,6 @@ function itemExists(haystack, needle) {
   for(var i=0; i<haystack.length; i++) if(compareObjects(haystack[i], needle)) return true;
   return false;
 }
+
+
 
