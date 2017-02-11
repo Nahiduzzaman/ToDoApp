@@ -1,6 +1,5 @@
-var task = {};
+//var task = {};
 var data = [];
-var searchText = '';
 if(JSON.parse(localStorage.getItem("todoData")) == null){
 	var todoData = [];
 }
@@ -8,37 +7,57 @@ else{
 	var todoData = JSON.parse(localStorage.getItem("todoData"));
 }
 
-
-function create(status,isfilter,searchText) {
-    if(JSON.parse(localStorage.getItem("todoData")) == null){
-		todoData = [];
+function searchTodo(text){
+    document.getElementById("main").innerHTML="";	
+	console.log('searchText',text);
+	console.log('todoData in searchTodo',todoData);
+    var forsearch = todoData;
+	for(var i = 0; i < forsearch.length; i++){
+		forsearch[i].s_id = i;
 	}
-	else{
-		todoData = JSON.parse(localStorage.getItem("todoData"));
+	function filterItems(query) {
+	    return forsearch.filter(function(el) {
+	     return el.taskname.toLowerCase().indexOf(query.toLowerCase()) > -1 || el.description.toLowerCase().indexOf(query.toLowerCase()) > -1 ;
+	    })
 	}
+	var searchedData = filterItems(text);
+	console.log('searchedData',searchedData)
+	for(var j=0;j < searchedData.length;j++){
+		createlist(searchedData[j].s_id);
+	}
+}
 
-	document.getElementById("main").innerHTML="";
 
-	task = {
+function createTask(){
+	var task = {
 		created_at: new Date(),
 		taskname: document.getElementById("taskname").value,
 		description: document.getElementById("description").value,
 		done: false
 	}
 
-	if(isfilter){
-		console.log('omg');
+    //console.log('todoData_length',todoData.length);
+
+	if(task.taskname == ""){
+	   	alert("Please enter task name!");
+	}
+	else if(task.description == ""){
+	   	alert("Please enter task description!")
 	}
 	else{
-		if(task.taskname != ""){
-			todoData.push(task);
-			console.log('todoData',todoData);
-			localStorage.setItem("todoData", JSON.stringify(todoData));
-		}
+		todoData.push(task);
+		console.log('todoData',todoData);
+		localStorage.setItem("todoData", JSON.stringify(todoData));
 	}
-    
-	todoData = JSON.parse(localStorage.getItem("todoData"));
 
+	modal.style.display = "none";
+	flterAndRender('all')
+}
+
+function flterAndRender(status) {
+	console.log(status);
+	document.getElementById("main").innerHTML="";
+	//todoData = JSON.parse(localStorage.getItem("todoData"));
     if(status == 'done'){
 	    for(var i = 0; i < todoData.length; i++) {
 	    	if(todoData[i].done == true){
@@ -54,15 +73,15 @@ function create(status,isfilter,searchText) {
 	    }
 	}	
 	else{
-    	data = sortbytitle(todoData);
+    	data = todoData;
+    	sortbytitle(data);
     	for(var i = 0; i < data.length; i++) {
 	    	createlist(i);	    	
 	    }
 	}
+	//console.log('searchText',searchText);
 
-	console.log('searchText',searchText);
-
-	if(searchText){
+	/*if(searchText){
 		console.log('searchText in create()',searchText);
 		console.log('searchText in TodoData',todoData);
 	    var results = [];
@@ -87,14 +106,7 @@ function create(status,isfilter,searchText) {
 		for(var i = 0; i < data.length; i++) {
 	    	createlist(i);	    	
 	    }
-    }
-    console.log('data',data);
-    console.log('data',data);
-    console.log('todoData',todoData);
-  
-
-	modal.style.display = "none";
-
+    }*/
 	
 }
 
@@ -120,7 +132,7 @@ function createlist(i){
 						  '<a id="editBtn'+[i]+'" onclick="editOnClick('+[i]+')" style="float:right;cursor:pointer;margin-right: 10px">Edit</a></h4>'+ 
                           '<p>'+data[i].description+'</p>';
 
-    if(todoData[i].done == true){
+    if(data[i].done == true){
 		card.style.backgroundColor = '#bfbfbf';
 		container.getElementsByTagName("B")[0].style.textDecoration="line-through";
 	}
@@ -132,7 +144,6 @@ function createlist(i){
 	console.log('list',list);
 	document.getElementById("main").appendChild(list);
 }
-
 
 function done(x, _this, task) {
   if (_this.checked) {
@@ -158,7 +169,6 @@ function remove(idx){
 }
 
 function sortbytitle(data){
-	console.log('data for sort',data)
 	data.sort(function(a, b) {
 	  var titleA = a.taskname.toUpperCase(); // ignore upper and lowercase
 	  var titleB = b.taskname.toUpperCase(); // ignore upper and lowercase
@@ -170,7 +180,6 @@ function sortbytitle(data){
 	  }
 	  return 0;
 	});
-    console.log('data after sort',data);
     return data;
 }
 
@@ -199,19 +208,6 @@ function update(){
 	window.location.reload();
 }
 
-
-function searchTodo(text){
-	var searchText = text.value;
-	//console.log('searchText',searchText);
-	create(undefined,undefined,searchText);
-}
-
-function filter(selection){
-	console.log('selection',selection.value);
-
-	var flag = 'filter';
-	create(selection.value,flag);
-}
 
 function cancel(){
 	modal.style.display = "none";

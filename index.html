@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="css/main.css">
   </head>
-  <body onload="filter(all)">
+  <body onload="flterAndRender('all')">
     <!-- <div class="header">
       <h1>ToDo App</h1>
     </div> -->
@@ -19,7 +19,7 @@
          </div>
          <div style="width: 90%; height: 100%; background-color: blue; float:right; padding: 29px 0px 29px;">
          <label for="search"></label>
-           <input type="text" tabindex="2" accesskey="s" style="width: 90%; margin-left: 50px;" id="search" name="search" onchange="searchTodo(this)" oninput="this.onchange()" placeholder="Search..">
+           <input type="text" tabindex="2" accesskey="s" style="width: 90%; margin-left: 50px;" id="search" name="search" onchange="searchTodo(this.value)" oninput="this.onchange()" placeholder="Search..">
          </div>
       </div>
     </header>
@@ -29,11 +29,11 @@
     </div>
 
     <div tabindex="3" style="padding: 15px; background: brown;">
-      <input type="radio" id="all" onchange="filter(this)" name="tasklist" value="all" checked/>
+      <input type="radio" id="all" onchange="flterAndRender(this.value)" name="tasklist" value="all" checked/>
       <span style="width:100px;display:inline-block;">All</span>
-      <input type="radio" id="done" onchange="filter(this)" name="tasklist" value="done" />
+      <input type="radio" id="done" onchange="flterAndRender(this.value)" name="tasklist" value="done" />
       <span style="width:100px;display:inline-block;">Done</span>
-      <input type="radio" id="pending" onchange="filter(this)" name="tasklist" value="pending" />
+      <input type="radio" id="pending" onchange="flterAndRender(this.value)" name="tasklist" value="pending" />
       <span style="width:100px;display:inline-block;">Pending</span>
     </div>
     
@@ -160,7 +160,7 @@
           <textarea rows="4" cols="50" id ="description" name="description" placeholder="Enter description ..." required></textarea>
             <!-- <button class="button button2">Cancel</button> -->            
         </div>
-        <span class="button button2" id="save" onclick="create()">Save</span>        
+        <span class="button button2" id="save" onclick="createTask()">Save</span>        
         <span class="button button2" id="update" onclick="update()">Update</span>        
         <span class="button button2" onclick="cancel()">Cancel</span>        
       </div>
